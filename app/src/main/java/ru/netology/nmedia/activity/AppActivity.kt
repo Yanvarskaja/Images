@@ -10,8 +10,13 @@ import com.google.android.gms.common.GoogleApiAvailability
 import com.google.firebase.messaging.FirebaseMessaging
 import ru.netology.nmedia.R
 import ru.netology.nmedia.activity.NewPostFragment.Companion.textArg
+import ru.netology.nmedia.util.StringArg
 
 class AppActivity : AppCompatActivity(R.layout.activity_app) {
+
+    companion object {
+        var Bundle.contentArg by StringArg
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -33,6 +38,16 @@ class AppActivity : AppCompatActivity(R.layout.activity_app) {
                         textArg = text
                     }
                 )
+
+//            intent.removeExtra(Intent.EXTRA_TEXT)
+//            findNavController(R.id.nav_host_fragment)
+//                .navigate(
+//                    R.id.action_feedFragment_to_imageFragment,
+//                    Bundle().apply {
+//                        textArg = text
+//                    }
+//                )
+
         }
 
         checkGoogleApiAvailability()

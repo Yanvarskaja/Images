@@ -1,9 +1,12 @@
 package ru.netology.nmedia.adapter
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
+import androidx.navigation.fragment.NavHostFragment.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -12,13 +15,16 @@ import ru.netology.nmedia.BuildConfig
 import ru.netology.nmedia.R
 import ru.netology.nmedia.databinding.CardPostBinding
 import ru.netology.nmedia.dto.Post
+import ru.netology.nmedia.enumeration.AttachmentType
 import ru.netology.nmedia.view.loadCircleCrop
+import java.lang.System.load
 
 interface OnInteractionListener {
     fun onLike(post: Post) {}
     fun onEdit(post: Post) {}
     fun onRemove(post: Post) {}
     fun onShare(post: Post) {}
+    fun onImage(post: Post) {}
 }
 
 class PostsAdapter(
@@ -40,6 +46,7 @@ class PostViewHolder(
     private val onInteractionListener: OnInteractionListener,
 ) : RecyclerView.ViewHolder(binding.root) {
 
+    @SuppressLint("UnsafeDynamicallyLoadedCode")
     fun bind(post: Post) {
         binding.apply {
             author.text = post.author
@@ -51,7 +58,7 @@ class PostViewHolder(
             attachmentImage.visibility = if (post.attachment != null) View.VISIBLE else View.GONE
 
             Glide.with(binding.attachmentImage)
-                .load("http://10.0.2.2:9999/images/${post.attachment?.url}")
+                .load("http://10.0.2.2:9999/${post.attachment?.url}")
                 .timeout(10_000)
                 .into(binding.attachmentImage)
 
@@ -75,17 +82,29 @@ class PostViewHolder(
                     }
                 }.show()
             }
+            attachmentImage.apply {
+                if (post.attachment?.type == AttachmentType.IMAGE) {
+                    val url = "http://10.0.2.2:9999/media/${post.attachment.url}"
+                    visibility = View.VISIBLE
+                    load(url)
+                    setOnClickListener {
+                        onInteractionListener.onImage(post)
+                    }
+                }
 
-            like.setOnClickListener {
-                onInteractionListener.onLike(post)
-            }
 
-            share.setOnClickListener {
-                onInteractionListener.onShare(post)
+                like.setOnClickListener {
+                    onInteractionListener.onLike(post)
+                }
+
+                share.setOnClickListener {
+                    onInteractionListener.onShare(post)
+                }
+
             }
         }
     }
-}
+
 
 class PostDiffCallback : DiffUtil.ItemCallback<Post>() {
     override fun areItemsTheSame(oldItem: Post, newItem: Post): Boolean {
