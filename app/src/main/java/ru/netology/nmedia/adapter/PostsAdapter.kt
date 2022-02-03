@@ -86,7 +86,7 @@ class PostViewHolder(
                 if (post.attachment?.type == AttachmentType.IMAGE) {
                     val url = "http://10.0.2.2:9999/media/${post.attachment.url}"
                     visibility = View.VISIBLE
-                    load(url)
+       //             load(url)
                     setOnClickListener {
                         onInteractionListener.onImage(post)
                     }
@@ -104,6 +104,7 @@ class PostViewHolder(
             }
         }
     }
+}
 
 
 class PostDiffCallback : DiffUtil.ItemCallback<Post>() {
