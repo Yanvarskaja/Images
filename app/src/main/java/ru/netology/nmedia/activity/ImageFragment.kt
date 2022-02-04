@@ -18,6 +18,7 @@ import com.bumptech.glide.Glide
 import com.github.dhaval2404.imagepicker.ImagePicker
 import com.github.dhaval2404.imagepicker.constant.ImageProvider
 import com.google.android.material.snackbar.Snackbar
+import ru.netology.nmedia.BuildConfig
 import ru.netology.nmedia.R
 import ru.netology.nmedia.activity.NewPostFragment.Companion.textArg
 import ru.netology.nmedia.adapter.OnInteractionListener
@@ -38,6 +39,8 @@ class ImageFragment : Fragment() {
 //
 //        (activity as AppCompatActivity).supportActionBar!!.hide()
 //    }
+
+
     private var fragmentBinding: FragmentImageBinding? = null
 
     override fun onCreateView(
@@ -53,13 +56,9 @@ class ImageFragment : Fragment() {
             activity.window.statusBarColor = statusBarColor
             activity.supportActionBar?.setBackgroundDrawable(ColorDrawable(statusBarColor))
         }
-        val url = "http://10.0.2.2:9999/media/${arguments?.getString("url")}"
-//
-//        fragmentBinding = binding
-//
-//        arguments?.urlArg
-//            ?.let(binding.attachmentImage::load)
-        Glide.with(this)
+              val url = "http://10.0.2.2:9999/${arguments?.getString("url")}"
+
+        Glide.with(binding.attachmentImage)
             .load(url)
             .into(binding.attachmentImage)
 
